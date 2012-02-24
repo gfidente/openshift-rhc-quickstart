@@ -24,7 +24,9 @@ pre. $ rhc app create -l $USERNAME -a $APPNAME -t ruby-1.8
 
 This will create an app of type ruby-1.8 called $APPNAME, but other types can be used:
 
-pre. raw-0.1, php-5.3, jbossas-7.0, jenkins-1.4, python-2.6, perl-5.10, ruby-1.8
+pre.
+raw-0.1, php-5.3, jbossas-7.0,
+jenkins-1.4, python-2.6, perl-5.10, ruby-1.8
 
 Here is a complete list of commands you can use to control your app
 
@@ -57,7 +59,9 @@ pre. $ rhc app cartridge add -c mysql-5.1 -a $APPNAME -l $USERNAME
 
 Here is a list of available cartridges (as of 24/03/2012)
 
-pre. postgresql-8.4, metrics-0.1, mysql-5.1, jenkins-client-1.4, 10gen-mms-agent-0.1, phpmyadmin-3.4, rockmongo-1.1, cron-1.4, mongodb-2.0
+pre.
+postgresql-8.4, metrics-0.1, mysql-5.1, jenkins-client-1.4,
+10gen-mms-agent-0.1, phpmyadmin-3.4, rockmongo-1.1, cron-1.4, mongodb-2.0
 
 h2. Using rhc from another (additional) client
 
