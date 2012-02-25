@@ -1,22 +1,22 @@
 h1. A quickstart to the OpenShift command line client tools (rhc)
 
-OpenShift is a cloud platform which allows the deployment and scaling of apps written in Java PHP Ruby Python Perl, provides continuous integration testing tools (Jenkins) and also offers MySQL, MongoDB, PostgreSQL and SQLite as storage options; it's definitely an interesting range of tools.
+"OpenShift":http://openshift.redhat.com is a PaaS platform from Red Hat which allows for the deployment and scale of apps written using Java PHP Ruby Python Perl, provides continuous integration testing tools (like Jenkins) and even has to offer MySQL, MongoDB, PostgreSQL and SQLite as storage options free of charge; it's definitely an interesting range of tools.
 
 The deployments can be controlled via a REST api or the rhc command line tool. This short guide aims at helping the newcomers to get started quickly with rhc.
 
-h2. Installation
+h2. Installing the tools
 
 There is a YUM repo available for Fedora and RHEL systems, but rhc is a Ruby gem and it means you can install it with gem once your gems build environment is setup properly.
 
 pre. $ gem install rhc
 
-h2. Create a domain
+h2. Creating a domain
 
 You should have already created an account on OpenShift, if you haven't yet, please do.Then let's create our domain. This is a namespace binded to your username and will affect the apps url, which will look like $APPNAME-$DOMAIN.rhcloud.com
 
 pre. $ rhc domain create -l $USERNAME -n $NAMESPACE
 
-h2. Create an app
+h2. Creating your first app
 
 Very simple step needed to create an app inside the namespace defining some of its peculiarities.
 
@@ -24,9 +24,10 @@ pre. $ rhc app create -l $USERNAME -a $APPNAME -t ruby-1.8
 
 This will create an app of type ruby-1.8 called $APPNAME, but other types can be used:
 
-pre.
+<pre>
 raw-0.1, php-5.3, jbossas-7.0,
 jenkins-1.4, python-2.6, perl-5.10, ruby-1.8
+</pre>
 
 Here is a complete list of commands you can use to control your app
 
@@ -59,9 +60,10 @@ pre. $ rhc app cartridge add -c mysql-5.1 -a $APPNAME -l $USERNAME
 
 Here is a list of available cartridges (as of 24/03/2012)
 
-pre.
+<pre>
 postgresql-8.4, metrics-0.1, mysql-5.1, jenkins-client-1.4,
 10gen-mms-agent-0.1, phpmyadmin-3.4, rockmongo-1.1, cron-1.4, mongodb-2.0
+</pre>
 
 h2. Using rhc from another (additional) client
 
@@ -147,7 +149,19 @@ $ ssh 0f5c99f17db74cf3a93edcf330401208@hellotornado-gosns.rhcloud.com
 
     type "help" for more info.
 
-[hellotornado-opinoid.rhcloud.com ~]
+[hellotornado-opinoid.rhcloud.com ~]> help
+Help menu: The following commands are available to help control your openshift
+application and environment.
+
+ctl_app         control your application (start, stop, restart, etc)
+ctl_all         control application and deps like mysql in one command
+tail_all        tail all log files
+export          list available environment variables
+rm              remove files / directories
+ls              list files / directories
+ps              list running applications
+kill            kill running applications
+mongo           interactive MongoDB shell
 </pre>
 
-Lot of fun there, these are Xeon CPUs with few Gigs of RAM. Enjoy!
+Lot of fun in there. There is also a shortcut for the interactive mongo shell. There doesn't seem to be any for mysql or postgres but you can use the standard command line tools or access to them via port forward as per "this blog entry":https://www.redhat.com/openshift/community/blogs/getting-started-with-port-forwarding-on-openshift
