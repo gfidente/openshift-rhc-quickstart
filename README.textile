@@ -1,8 +1,8 @@
 h1. A quickstart to the OpenShift command line client tools (rhc)
 
-"OpenShift":http://openshift.redhat.com is a PaaS platform from Red Hat which allows for the deployment and scale of apps written using Java PHP Ruby Python Perl, provides continuous integration testing tools (like Jenkins) and even has to offer MySQL, MongoDB, PostgreSQL and SQLite as storage options free of charge; it's definitely an interesting range of tools.
+"OpenShift":http://openshift.redhat.com is a PaaS from Red Hat. It allows for deployment (and scaling) of apps written using Java, PHP, Ruby, Python, Perl including a number of frameworks and with support for MySQL, MongoDB, SQLite, PostgreSQL and even provides continuous integration tools (Jenkins), it's definitely an interesting range of tools.
 
-The deployments can be controlled via a REST api or the rhc command line tool. This short guide aims at helping the newcomers to get started quickly with rhc.
+The deployments can be controlled via a REST api or the rhc command line tool. This short guide aims at helping the newcomers to get started quickly with the rhc command.
 
 h2. Installing the tools
 
@@ -12,64 +12,76 @@ pre. $ gem install rhc
 
 h2. Creating a domain
 
-You should have already created an account on OpenShift, if you haven't yet, please do.Then let's create our domain. This is a namespace binded to your username and will affect the apps url, which will look like $APPNAME-$DOMAIN.rhcloud.com
+You should have created already an account on OpenShift, if you haven't please do, then you'll be able to chose you domain name. This is a namespace binded to your username and will affect the apps url, which will look like $APPNAME-$DOMAINNAME.rhcloud.com
 
-pre. $ rhc domain create -l $USERNAME -n $NAMESPACE
+pre. $ rhc domain create $NAMESPACE -l $USERNAME
 
 h2. Creating your first app
 
 Very simple step needed to create an app inside the namespace defining some of its peculiarities.
 
-pre. $ rhc app create -l $USERNAME -a $APPNAME -t ruby-1.8
+pre. $ rhc app create $APPNAME -l $USERNAME -t ruby-1.9
 
-This will create an app of type ruby-1.8 called $APPNAME, but other types can be used:
+This will create an app of type ruby-1.9 called $APPNAME, but other types can be used (as of January 21st 2013):
 
 <pre>
-raw-0.1, php-5.3, jbossas-7.0,
-jenkins-1.4, python-2.6, perl-5.10, ruby-1.8
+diy-0.1             Do-It-Yourself
+jbossas-7           JBoss Application Server 7.1
+jbosseap-6.0        JBoss Enterprise Application Platform 6.0
+jenkins-1.4         Jenkins Server 1.4
+nodejs-0.6          Node.js 0.6
+perl-5.10           Perl 5.10
+php-5.3             PHP 5.3
+python-2.6          Python 2.6
+ruby-1.8            Ruby 1.8
+ruby-1.9            Ruby 1.9
+jbossews-1.0        Tomcat 6 (JBoss EWS 1.0)
+zend-5.6            Zend Server 5.6
 </pre>
 
 Here is a complete list of commands you can use to control your app
 
 <pre>
-create       Bind a registered rhcloud user to a domain in rhcloud.
-show         Display information about a user
-start        Starts the application (includes embedded)
-stop         Stops the application (includes embedded)
-force-stop   Stops all application processes
-restart      Restart the application
-reload       Reloads application configuration
-status       Returns application status
-destroy      Destroys the application
-tidy         Garbage collects the git repo and empties log/tmp dirs
-add-alias    Add a custom domain name for the application
-remove-alias Remove a custom domain name for the application
-threaddump   Trigger a thread dump for jbossas applications
-tail         Tail the logs of an application
-snapshot     [save|restore]  Saves/Restores an application snapshot to/from a tarball at the location specified using --filepath (default: ./$APPNAME.tar.gz)
-cartridge    ACTION          Manage an embedded cartridge
+create             Create an application and adds it to a domain
+git-clone          Clone and configure an application's repository locally
+delete             Delete an application from the server
+start              Start the application
+stop               Stop the application
+force-stop         Stops all application processes
+restart            Restart the application
+reload             Reload the application's configuration
+tidy               Clean out the application's logs and tmp directories and tidy up the git repo on the server
+show               Show information about an application
+status             Show status of an application's gears
 </pre>
-
-We'll get back on tail and snapshot later.
 
 h2. Adding cartridges (eg. a database or cron)
 
 This is needed to add support for a specific feature to your app. We are adding here the mysql-5.1 cartridge.
 
-pre. $ rhc app cartridge add -c mysql-5.1 -a $APPNAME -l $USERNAME
+pre. $ rhc cartridge add mysql-5.1 -a $APPNAME -l $USERNAME
 
-Here is a list of available cartridges (as of 24/03/2012)
+Here is a list of available cartridges (as of January 21st 2013)
 
 <pre>
-postgresql-8.4, metrics-0.1, mysql-5.1, jenkins-client-1.4,
-10gen-mms-agent-0.1, phpmyadmin-3.4, rockmongo-1.1, cron-1.4, mongodb-2.0
+10gen-mms-agent-0.1 10gen Mongo Monitoring Service Agent 0.1
+cron-1.4            Cron 1.4
+haproxy-1.4         HAProxy 1.4
+jenkins-client-1.4  Jenkins Client 1.4
+mongodb-2.2         MongoDB NoSQL Database 2.2
+mysql-5.1           MySQL Database 5.1
+metrics-0.1         OpenShift Metrics 0.1
+phpmyadmin-3.4      phpMyAdmin 3.4
+postgresql-8.4      PostgreSQL Database 8.4
+rockmongo-1.1       RockMongo 1.1
+switchyard-0.6      SwitchYard 0.6
 </pre>
 
 h2. Using rhc from another (additional) client
 
 A very common need is to access the same account from different workstations, in this case you'll have to add the user's public SSH keys to the account.
 
-pre. $ rhc sshkey add -k /path/to/key.pub -i $NAME -l $USERNAME
+pre. $ rhc sshkey add $KEYNAME /path/to/key.pub -l $USERNAME
 
 $NAME is a general identifier. You can customize which is the default SSH key to be used by rhc in its config file.
 
@@ -85,14 +97,14 @@ h2. Troubleshooting your app
 
 Two very powerful commands allow you to tail log files and to create local copies of the entire workspace where your app is running into remotely.
 
-pre. $ rhc tail -a $APPNAME  -l $USERNAME -f $APPNAME/logs/*
+pre. $ rhc tail $APPNAME -l $USERNAME
 
-This executes the regular tail command on the target host, copying back the output. You can use any other tail option passing the -i argument.
+This executes the regular tail command on the target host, copying back the output. You can use any other tail option passing the -o argument.
 
 Finally you can get a snapshot of the working environment to look, for example, at custom files or even the execution environment variables.
 
 <pre>
-$ rhc snapshot save -a $APPNAME -l $USERNAME
+$ rhc snapshot save $APPNAME -l $USERNAME
 
 $ tar xzf $APPNAME.tar.gz
 
@@ -120,34 +132,28 @@ export OPENSHIFT_DATA_DIR='/var/lib/libra/0f5c99f17db74cf3a93edcf330401208/hello
 
 h2. Notes
 
-The tools are quite easy to manage and can be updated easily with a gem update. There are also a lot of other interesting features you may want to look at, like the port forwarding but this was just a quickstart intended to provide a short reference. One last note before closing: you can SSH into your system!
+The tool is quite easy to manage and can be updated easily as it is a gem. There are also a lot of other interesting features you may want to look at, like the port forwarding but this was just a quickstart intended to provide a short reference. One last note before closing: you can SSH into your remote system:
 
 <pre>
-$ rhc-domain-info -l $USERNAME
-Password: 
-Application Info
-================
-hellotornado
-    Framework: python-2.6
-     Creation: 2012-02-22T15:46:02-05:00
-         UUID: 0f5c99f17db74cf3a93edcf330401208
-      Git URL: ssh://0f5c99f17db74cf3a93edcf330401208@hellotornado-gosns.rhcloud.com/~/git/hellotornado.git/
-   Public URL: http://hellotornado-gosns.rhcloud.com/
+$ rhc domain show
+  hellotornado @ http://hellotornado-gfidente.rhcloud.com/
+  ========================================================
+    Application Info
+    ================
+      Created   = Jan 19  5:24 PM
+      UUID      = ca5b02c422f04691959d6235de18ff81
+      Gear Size = small
+      Git URL   = ssh://ca5b02c422f04691959d6235de18ff81@hellotornado-gfidente.rhcloud.com/~/git/hellotornado.git/
+      SSH URL   = ssh://ca5b02c422f04691959d6235de18ff81@hellotornado-gfidente.rhcloud.com
+    Cartridges
+    ==========
+      diy-0.1
 
-$ ssh 0f5c99f17db74cf3a93edcf330401208@hellotornado-gosns.rhcloud.com
+$ ssh ca5b02c422f04691959d6235de18ff81@hellotornado-gfidente.rhcloud.com
 
     Welcome to OpenShift shell
 
-    This shell will assist you in managing openshift applications.
-
-    !!! IMPORTANT !!! IMPORTANT !!! IMPORTANT !!!
-    Shell access is quite powerful and it is possible for you to
-    accidentally damage your application.  Procede with care!
-    If worse comes to worse, destroy your application with rhc-ctl-app
-    and recreate it
-    !!! IMPORTANT !!! IMPORTANT !!! IMPORTANT !!!
-
-    type "help" for more info.
+    [...] cut
 
 [hellotornado-opinoid.rhcloud.com ~]> help
 Help menu: The following commands are available to help control your openshift
